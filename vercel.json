@@ -1,0 +1,7 @@
+{
+  "buildCommand": "yarn workspace app build",
+  "devCommand": "yarn workspace app start --port $PORT",
+  "framework": "vite",
+  "installCommand": "yarn install --frozen-lockfile",
+  "outputDirectory": "app/build/client"
+}

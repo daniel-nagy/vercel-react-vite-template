@@ -3,5 +3,12 @@
   "workspaces": [
     "api",
     "app"
-  ]
+  ],
+  "scripts": {
+    "build": "vercel build",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "vercel": "^32.2.3"
+  }
 }
