@@ -1,0 +1,43 @@
+name: CI
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: One of production or preview.
+        required: true
+        type: string
+    outputs:
+      build-cache-key:
+        description: The key used to cache the build.
+        value: ${{ jobs.build.outputs.build-cache-key }}
+    secrets:
+      VERCEL_ORG_ID:
+        required: true
+      VERCEL_PROJECT_ID:
+        required: true
+      VERCEL_TOKEN:
+        required: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_CACHE_KEY: build-${{ github.sha }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    outputs:
+      build-cache-key: ${{ env.BUILD_CACHE_KEY }}
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+      - name: Pull vercel environment information
+        run: yarn vercel pull --yes --environment=${{ inputs.environment }} --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build app
+        run: yarn build ${{ inputs.environment == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Create build artifact
+        id: cache
+        uses: actions/cache/save@v3
+        with:
+          key: ${{ env.BUILD_CACHE_KEY }}
+          path: .vercel/output

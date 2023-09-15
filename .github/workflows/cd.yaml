@@ -1,0 +1,53 @@
+name: CD
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: One of production or preview.
+        required: true
+        type: string
+      build-cache-key:
+        description: The key used to cache the build.
+        required: true
+        type: string
+    outputs:
+      url:
+        description: The app URL.
+        value: ${{ jobs.deploy.outputs.url }}
+    secrets:
+      VERCEL_ORG_ID:
+        required: true
+      VERCEL_PROJECT_ID:
+        required: true
+      VERCEL_TOKEN:
+        required: true
+jobs:
+  deploy:
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ steps.deploy.outputs.url }}
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+      - name: Download build artifact
+        uses: actions/cache/restore@v3
+        id: cache
+        with:
+          fail-on-cache-miss: true
+          key: ${{ inputs.build-cache-key }}
+          path: .vercel/output
+      - name: Pull vercel environment information
+        run: yarn vercel pull --yes --environment=${{ inputs.environment }} --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy to vercel
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt ${{ inputs.environment == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT

@@ -1,0 +1,43 @@
+name: Branch Update
+on:
+  pull_request:
+    paths-ignore:
+      - .gitignore
+      - README.md
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - .gitignore
+      - README.md
+jobs:
+  environment:
+    runs-on: ubuntu-latest
+    outputs:
+      current: ${{ steps.environment.outputs.current }}
+    steps:
+      - id: environment
+        run: echo "current=${{ github.ref_name == 'main' && 'production' || 'preview' }}" >> $GITHUB_OUTPUT
+  ci:
+    concurrency:
+      cancel-in-progress: true
+      group: ci-${{ github.ref }}
+    needs: [environment]
+    uses: ./.github/workflows/ci.yaml
+    with:
+      environment: ${{ needs.environment.outputs.current }}
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  cd:
+    concurrency: cd-${{ github.ref }}
+    needs: [environment, ci]
+    uses: ./.github/workflows/cd.yaml
+    with:
+      environment: ${{ needs.environment.outputs.current }}
+      build-cache-key: ${{ needs.ci.outputs.build-cache-key }}
+    secrets:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
