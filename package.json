@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "build": "vercel build",
-    "start": "vercel dev"
+    "start": "yarn workspace app start"
   },
   "dependencies": {
     "vercel": "^32.2.3"

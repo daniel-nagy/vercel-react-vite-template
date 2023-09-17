@@ -5,7 +5,9 @@
   "version": "0.0.0",
   "scripts": {
     "prebuild": "yarn type-check",
-    "build": "vite build",
+    "build": "yarn build:client && yarn build:server",
+    "build:client": "vite build",
+    "build:server": "vite build --emptyOutDir false --ssr main_server.tsx",
     "start": "vite --host",
     "type-check": "tsc"
   },
