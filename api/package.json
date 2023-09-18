@@ -3,11 +3,16 @@
   "private": true,
   "type": "module",
   "version": "0.0.0",
+  "scripts": {
+    "build": "node esbuild.js",
+    "start": "yarn build --watch"
+  },
   "dependencies": {
     "@vercel/node": "^3.0.5"
   },
   "devDependencies": {
     "@types/node": "^20.6.2",
+    "esbuild": "^0.19.3",
     "typescript": "^5.2.2"
   }
 }

@@ -4,33 +4,15 @@ import { join } from "node:path";
 import { Readable } from "node:stream";
 import { createGzip } from "node:zlib";
 
-declare module AppModule {
-  type Context = {
-    pageNotFound: boolean;
-    static: boolean;
-  };
-
-  export const render: (
-    indexHtml: string,
-    href: string,
-    cookie?: string | null
-  ) => Promise<{
-    context: Context;
-    headers?: Record<string, string>;
-    html: string;
-  }>;
-}
+type AppModule = typeof import("../../app/src/main_server");
 
 const filesDir = join(process.cwd(), "files");
 const indexFile = join(filesDir, "../app/build/main.html");
 const appModuleFile = join(filesDir, "../app/build/main_server.js");
 
-export default async function ssr(
-  request: VercelRequest,
-  response: VercelResponse
-) {
+export async function ssr(request: VercelRequest, response: VercelResponse) {
   const indexHtml = readFileSync(indexFile, "utf-8");
-  const App: typeof AppModule = await import(appModuleFile);
+  const App: AppModule = await import(appModuleFile);
   const protocol = request.headers["x-forwarded-proto"];
   const url = `${protocol}://${request.headers.host}${request.url}`;
 

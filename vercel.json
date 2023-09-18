@@ -3,6 +3,11 @@
   "cleanUrls": true,
   "devCommand": "",
   "framework": null,
+  "functions": {
+    "api/build/main.js": {
+      "includeFiles": "api/build/**"
+    }
+  },
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -25,6 +30,6 @@
   ],
   "installCommand": "yarn install --frozen-lockfile",
   "outputDirectory": "app/build",
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/src/ssr" }],
+  "rewrites": [{ "source": "/(.*)", "destination": "/api/build/main" }],
   "trailingSlash": false
 }
