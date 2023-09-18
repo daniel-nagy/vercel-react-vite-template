@@ -1,8 +1,8 @@
 {
-  "buildCommand": "yarn workspace app build",
+  "buildCommand": "",
   "cleanUrls": true,
-  "devCommand": "yarn workspace app start --port $PORT",
-  "framework": "vite",
+  "devCommand": "",
+  "framework": null,
   "headers": [
     {
       "source": "/assets/(.*)",

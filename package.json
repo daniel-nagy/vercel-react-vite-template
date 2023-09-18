@@ -5,10 +5,13 @@
     "app"
   ],
   "scripts": {
-    "build": "vercel build",
-    "start": "yarn workspace app start"
+    "build": "yarn workspace app build && vercel build",
+    "start": "concurrently 'yarn workspace app start' 'vercel dev -l 4000'"
   },
   "dependencies": {
     "vercel": "^32.2.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.1"
   }
 }
