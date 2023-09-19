@@ -12,6 +12,7 @@ const options = {
   outfile: "build/main.js",
   platform: "node",
   sourcemap: true,
+  target: ["es2022"],
 };
 
 if (args.includes("--watch")) {
