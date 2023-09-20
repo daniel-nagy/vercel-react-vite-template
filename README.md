@@ -4,11 +4,11 @@ A Vercel template using React, Typescript, and Vite.
 
 #### Key Features
 
-* Continous integration
-* Server rendering
-* Bundling serverless functions
+- Continuous integration
+- Server rendering
+- Bundling serverless functions
 
-For a step by step tutorial for how this template was created see my blog post [Deploying a React App to Vercel](https://danielnagy.me/posts/Post_9zympalet5ub).
+To see how this template was created checkout my blog post [Deploying a React App to Vercel](https://danielnagy.me/posts/Post_9zympalet5ub).
 
 #### Technologies
 
@@ -31,7 +31,7 @@ Start by forking this repo. If you use [`asdf`](https://asdf-vm.com) just add th
 > asdf install
 ```
 
-If you do not use asdf you will need Node.js and yarn installed using your prefered method. You can find the specific versions of these dependencies in the **.tool-versions** file.
+If you do not use asdf you will need Node.js and yarn installed using your preferred method. You can find the specific versions of these dependencies in the **.tool-versions** file.
 
 Once you have Node.js and yarn installed run `yarn` to install the dependencies
 
@@ -65,4 +65,3 @@ You can deploy your app manually using the following commands.
 This repo contains GitHub Actions workflows for automatically deploying updates to your app. Changes to an open PR will be automatically deployed to a preview environment. Changes to the main branch will be automatically deployed to production. This is a solid foundation for you to build on top of.
 
 In order to use this feature you will need to add 3 secrets to your repository to link your Vercel project: `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, and `VERCEL_TOKEN`. The `orgId` and `projectId` can be found in **.vercel/project.json** after you link your app using the CLI. You will need to create an API access token in Vercel.
-
